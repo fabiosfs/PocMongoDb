@@ -1,7 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PocMongoDb.Domain.SharedContext.Dtos;
-using PocMongoDb.Domain.SharedContext.Entities;
 using PocMongoDb.Domain.SharedContext.Interfaces;
 
 namespace PocMongoDb.Controllers
@@ -10,30 +9,30 @@ namespace PocMongoDb.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private readonly IDomain<WeatherForecastEntity> _domain;
-        private readonly IMapper _mapper;
-        public WeatherForecastController(IDomain<WeatherForecastEntity> domain, IMapper mapper)
+        private readonly IDomain<WeatherForecastDto> _domain;
+
+        public WeatherForecastController(IDomain<WeatherForecastDto> domain)
         {
             _domain = domain;
-            _mapper = mapper;
+            
         }
 
         [HttpDelete("{id}")]
         public async Task<WeatherForecastDto> DeleteAsync(Guid id, CancellationToken cancel)
         {
-            return _mapper.Map<WeatherForecastDto>(await _domain.DeleteAsync(id, cancel));
+            return await _domain.DeleteAsync(id, cancel);
         }
 
         [HttpGet("{id}")]
         public async Task<WeatherForecastDto> GetByIdAsync(Guid id, CancellationToken cancel)
         {
-            return _mapper.Map<WeatherForecastDto>(await _domain.GetByIdAsync(id, cancel));
+            return await _domain.GetByIdAsync(id, cancel);
         }
 
         [HttpPost]
         public async Task<WeatherForecastDto> InsertAsync([FromBody]WeatherForecastDto data, CancellationToken cancel)
         {
-            return _mapper.Map<WeatherForecastDto>(await _domain.InsertAsync(_mapper.Map<WeatherForecastEntity>(data), cancel));
+            return await _domain.InsertAsync(data, cancel);
         }
 
         [HttpPost("many")]
@@ -52,19 +51,19 @@ namespace PocMongoDb.Controllers
                     Summary = Summaries[Random.Shared.Next(Summaries.Length)]
                 });
             }
-            return _mapper.Map<IEnumerable<WeatherForecastDto>>(await _domain.InsertManyAsync(_mapper.Map<IEnumerable<WeatherForecastEntity>>(data), cancel));
+            return await _domain.InsertManyAsync(data, cancel);
         }
 
         [HttpGet]
         public async Task<IEnumerable<WeatherForecastDto>> ListAsync(CancellationToken cancel)
         {
-            return _mapper.Map<IEnumerable<WeatherForecastDto>>(await _domain.ListAsync(cancel));
+            return await _domain.ListAsync(cancel);
         }
 
         [HttpPut("{id}")]
         public async Task<WeatherForecastDto> UpdateAsync(WeatherForecastDto data, CancellationToken cancel)
         {
-            return _mapper.Map<WeatherForecastDto>(await _domain.UpdateAsync(_mapper.Map<WeatherForecastEntity>(data), cancel));
+            return await _domain.UpdateAsync(data, cancel);
         }
     }
 }

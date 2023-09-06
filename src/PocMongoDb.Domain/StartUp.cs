@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using PocMongoDb.Domain.CompanyContext.Mapper;
 using PocMongoDb.Domain.SharedContext.Domains;
-using PocMongoDb.Domain.SharedContext.Entities;
+using PocMongoDb.Domain.SharedContext.Dtos;
 using PocMongoDb.Domain.SharedContext.Interfaces;
 
 namespace PocMongoDb.Domain
@@ -18,7 +18,7 @@ namespace PocMongoDb.Domain
 
             var mapper = configuration.CreateMapper();
             services.AddSingleton(mapper);
-            services.AddSingleton<IDomain<WeatherForecastEntity>, WeatherForecastDomain>();
+            services.AddSingleton<IDomain<WeatherForecastDto>, WeatherForecastDomain>();
         }
     }
 }

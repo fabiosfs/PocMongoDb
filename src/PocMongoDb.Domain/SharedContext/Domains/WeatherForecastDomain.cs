@@ -1,45 +1,58 @@
-﻿using PocMongoDb.Domain.SharedContext.Entities;
+﻿using AutoMapper;
+using PocMongoDb.Domain.SharedContext.Dtos;
+using PocMongoDb.Domain.SharedContext.Entities;
 using PocMongoDb.Domain.SharedContext.Interfaces;
 
 namespace PocMongoDb.Domain.SharedContext.Domains
 {
-    public class WeatherForecastDomain : IDomain<WeatherForecastEntity>
+    public class WeatherForecastDomain : IDomain<WeatherForecastDto>
     {
         private readonly IBaseRepository<WeatherForecastEntity> _repository;
+        private readonly IMapper _mapper;
 
-        public WeatherForecastDomain(IBaseRepository<WeatherForecastEntity> repository) 
+        public WeatherForecastDomain(IBaseRepository<WeatherForecastEntity> repository, IMapper mapper) 
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
-        public async Task<WeatherForecastEntity> DeleteAsync(Guid id, CancellationToken cancel)
+        public async Task<WeatherForecastDto> DeleteAsync(Guid id, CancellationToken cancel)
         {
-            return await _repository.DeleteAsync(id, cancel);
+            var result = await _repository.DeleteAsync(id, cancel);
+            return _mapper.Map<WeatherForecastDto>(result);
         }
 
-        public async Task<WeatherForecastEntity> GetByIdAsync(Guid id, CancellationToken cancel)
+        public async Task<WeatherForecastDto> GetByIdAsync(Guid id, CancellationToken cancel)
         {
-            return await _repository.GetByIdAsync(id, cancel);
+            var result = await _repository.GetByIdAsync(id, cancel);
+            return _mapper.Map<WeatherForecastDto>(result);
         }
 
-        public async Task<WeatherForecastEntity> InsertAsync(WeatherForecastEntity data, CancellationToken cancel)
+        public async Task<WeatherForecastDto> InsertAsync(WeatherForecastDto data, CancellationToken cancel)
         {
-            return await _repository.InsertAsync(data, cancel);
+            var record = _mapper.Map<WeatherForecastEntity>(data);
+            var result = await _repository.InsertAsync(record, cancel);
+            return _mapper.Map<WeatherForecastDto>(result);
         }
 
-        public async Task<IEnumerable<WeatherForecastEntity>> InsertManyAsync(IEnumerable<WeatherForecastEntity> data, CancellationToken cancel)
+        public async Task<IEnumerable<WeatherForecastDto>> InsertManyAsync(IEnumerable<WeatherForecastDto> data, CancellationToken cancel)
         {
-            return await _repository.InsertManyAsync(data, cancel);
+            var record = _mapper.Map<IEnumerable<WeatherForecastEntity>>(data);
+            var result = await _repository.InsertManyAsync(record, cancel);
+            return _mapper.Map<IEnumerable<WeatherForecastDto>>(result);
         }
 
-        public async Task<IEnumerable<WeatherForecastEntity>> ListAsync(CancellationToken cancel)
+        public async Task<IEnumerable<WeatherForecastDto>> ListAsync(CancellationToken cancel)
         {
-            return await _repository.ListAsync(cancel);
+            var result = await _repository.ListAsync(cancel);
+            return _mapper.Map<IEnumerable<WeatherForecastDto>>(result);
         }
 
-        public async Task<WeatherForecastEntity> UpdateAsync(WeatherForecastEntity data, CancellationToken cancel)
+        public async Task<WeatherForecastDto> UpdateAsync(WeatherForecastDto data, CancellationToken cancel)
         {
-            return await _repository.UpdateAsync(data, cancel);
+            var record = _mapper.Map<WeatherForecastEntity>(data);
+            var result = await _repository.UpdateAsync(record, cancel);
+            return _mapper.Map<WeatherForecastDto>(result);
         }
     }
 }

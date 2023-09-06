@@ -1,12 +1,12 @@
 ﻿namespace PocMongoDb.Domain.SharedContext.Interfaces
 {
-    public interface IDomain<TEntity>
+    public interface IDomain<TDto>
     {
-        public Task<IEnumerable<TEntity>> ListAsync(CancellationToken cancel);
-        public Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancel);
-        public Task<TEntity> InsertAsync(TEntity data, CancellationToken cancel);
-        public Task<IEnumerable<TEntity>> InsertManyAsync(IEnumerable<TEntity> data, CancellationToken cancel);
-        public Task<TEntity> UpdateAsync(TEntity data, CancellationToken cancel);
-        public Task<TEntity> DeleteAsync(Guid id, CancellationToken cancel);
+        public Task<IEnumerable<TDto>> ListAsync(CancellationToken cancel);
+        public Task<TDto> GetByIdAsync(Guid id, CancellationToken cancel);
+        public Task<TDto> InsertAsync(TDto data, CancellationToken cancel);
+        public Task<IEnumerable<TDto>> InsertManyAsync(IEnumerable<TDto> data, CancellationToken cancel);
+        public Task<TDto> UpdateAsync(TDto data, CancellationToken cancel);
+        public Task<TDto> DeleteAsync(Guid id, CancellationToken cancel);
     }
 }
