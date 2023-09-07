@@ -9,9 +9,9 @@ namespace PocMongoDb.Domain.Repositories.Shared
     {
         protected IMongoCollection<TEntity> _collection { get; set; }
 
-        public BaseRepository(IMongoDatabase database, string collection)
+        public BaseRepository(IMongoDatabase database)
         {
-            _collection = database.GetCollection<TEntity>(collection, null);
+            _collection = database.GetCollection<TEntity>(typeof(TEntity).Name, null);
         }
 
         public virtual async Task<IEnumerable<TEntity>> ListAsync(CancellationToken cancel)
