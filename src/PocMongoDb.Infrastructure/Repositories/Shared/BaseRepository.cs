@@ -11,7 +11,7 @@ namespace PocMongoDb.Domain.Repositories.Shared
 
         public BaseRepository(IMongoDatabase database)
         {
-            _collection = database.GetCollection<TEntity>(typeof(TEntity).Name, null);
+            _collection = database.GetCollection<TEntity>(typeof(TEntity).Name.Replace("Entity", ""), null);
         }
 
         public virtual async Task<IEnumerable<TEntity>> ListAsync(CancellationToken cancel) => await ListAsync(_ => true, cancel);
