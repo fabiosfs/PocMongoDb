@@ -14,28 +14,13 @@ namespace PocMongoDb.Domain.Repositories.Shared
             _collection = database.GetCollection<TEntity>(typeof(TEntity).Name, null);
         }
 
-        public virtual async Task<IEnumerable<TEntity>> ListAsync(CancellationToken cancel)
-        {
-            var records = await ListAsync(_ => true, cancel);
-
-            return records;
-        }
+        public virtual async Task<IEnumerable<TEntity>> ListAsync(CancellationToken cancel) => await ListAsync(_ => true, cancel);
 
         protected virtual async Task<IEnumerable<TEntity>> ListAsync(Expression<Func<TEntity, bool>> fillter, CancellationToken cancel)
-        {
-            var records = await _collection.FindAsync(fillter, null, cancel);
+            => (await _collection.FindAsync(fillter, null, cancel)).ToList();
 
-            var data = records.ToList();
+        public virtual async Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancel) => (await ListAsync(_ => _.Id == id, cancel)).FirstOrDefault();
 
-            return data.ToList();
-        }
-
-        public virtual async Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancel)
-        {
-            var records = await ListAsync(_ => _.Id == id, cancel);
-
-            return records.FirstOrDefault();
-        }
 
         public virtual async Task<TEntity> InsertAsync(TEntity entity, CancellationToken cancel)
         {
@@ -56,10 +41,6 @@ namespace PocMongoDb.Domain.Repositories.Shared
             return entity;
         }
 
-        public virtual async Task<TEntity> DeleteAsync(Guid id, CancellationToken cancel)
-        {
-            var data = await _collection.FindOneAndDeleteAsync(x => x.Id == id, null, cancel);
-            return data;
-        }
+        public virtual async Task<TEntity> DeleteAsync(Guid id, CancellationToken cancel) => await _collection.FindOneAndDeleteAsync(x => x.Id == id, null, cancel);
     }
 }
